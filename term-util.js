@@ -22,12 +22,13 @@ function cfn (sc, ec) {
   }
 }
 
-var bold   = cfn('\x1B[1m',  '\x1B[22m')
-  , italic = cfn('\x1B[3m',  '\x1B[23m')
-  , red    = cfn('\x1B[31m', '\x1B[39m')
-  , green  = cfn('\x1B[32m', '\x1B[39m')
-  , yellow = cfn('\x1B[33m', '\x1B[39m')
-  , blue   = cfn('\x1B[34m', '\x1B[39m')
+var bold    = cfn('\x1B[1m',  '\x1B[22m')
+  , italic  = cfn('\x1B[3m',  '\x1B[23m')
+  , inverse = cfn('\x1B[7m',  '\x1B[27m')
+  , red     = cfn('\x1B[31m', '\x1B[39m')
+  , green   = cfn('\x1B[32m', '\x1B[39m')
+  , yellow  = cfn('\x1B[33m', '\x1B[39m')
+  , blue    = cfn('\x1B[34m', '\x1B[39m')
 
 module.exports = {
     repeat : repeat
@@ -35,6 +36,7 @@ module.exports = {
   , center : center
   , bold   : bold
   , italic : italic
+  , inverse : inverse
 
   , red    : red
   , green  : green
