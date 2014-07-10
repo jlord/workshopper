@@ -31,15 +31,15 @@ var bold    = cfn('\x1B[1m',  '\x1B[22m')
   , blue    = cfn('\x1B[34m', '\x1B[39m')
 
 module.exports = {
-    repeat : repeat
-  , wrap   : wrap
-  , center : center
-  , bold   : bold
-  , italic : italic
+    repeat  : repeat
+  , wrap    : wrap
+  , center  : center
+  , bold    : bold
+  , italic  : italic
   , inverse : inverse
 
-  , red    : red
-  , green  : green
-  , yellow : yellow
-  , blue   : blue
+  , red     : red
+  , green   : green
+  , yellow  : yellow
+  , blue    : blue
 }
