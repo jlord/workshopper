@@ -6,6 +6,7 @@ const argv       = require('optimist').argv
     , msee       = require('msee')
     , http       = require('http')
     , ecstatic   = require('ecstatic')
+    , open       = require('open')
 
 const showMenu  = require('./menu')
     , verify    = require('./verify')
@@ -16,6 +17,7 @@ const showMenu  = require('./menu')
     , green     = require('./term-util').green
     , yellow    = require('./term-util').yellow
     , center    = require('./term-util').center
+    , inverse   = require('./term-util').inverse
 
 const defaultWidth = 65
 
@@ -277,10 +279,12 @@ Workshopper.prototype._runServer = function () {
 
   server.on('listening', function () {
     var addr = this.address()
+    open('http://localhost:' + addr.port)
     console.log(bold('\n Server time! ᕕ( ᐛ )ᕗ') + '\n The server is now running from this window.\n\n'
-      + ' It\'s serving the guide at this address, paste it in your broswer: %s:%s', bold('http://localhost'), bold(addr.port) + '\n'
+      + ' The guide should now be open in a new browser window.\n'
+      + ' If not, paste this address in your browser: %s:%s', bold('http://localhost'), bold(addr.port) + '\n'
       + ' Next, open a new terminal window and run `git-it` again and work from there.\n\n'
-      + ' When you are done you can close this window or press CTRL + C to end the server.\n'
+      + ' When you\'re done you can close this window or press ' + inverse('CTRL + C') + ' to end the server.\n'
       + ' BEEP BOOP')
   })
 }
