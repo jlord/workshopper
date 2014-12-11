@@ -274,7 +274,7 @@ Workshopper.prototype._printHelp = function () {
 
 Workshopper.prototype._runServer = function (lang) {
   var server = http.createServer(
-    ecstatic({ root: this.appDir + '/guide' })
+    ecstatic({ root: path.join(this.appDir, 'guide') })
   ).listen(0)
 
   server.on('listening', function () {
