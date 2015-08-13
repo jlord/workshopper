@@ -405,34 +405,13 @@ function onselect (name) {
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
     var pathtoguide = path.join(this.appDir,'guide', 'index')
-    // console.log(
-    //   bold('\n » To print these instructions again, run: `' + this.name + ' print`.\n'))
-    // console.log(
-    //   bold(' » To execute your program in a test environment, run:\n   `' + this.name + ' run program.js`.'))
-    console.log(
-      bold(green('  » To verify your work for this problem, run: `' + this.name + ' verify`.\n  » Run `git-it` again to launch menu & go onto next challenge\n')))
-    // console.log(
-    //   bold(green('  » Run `git-it` again to launch menu & go onto next challenge\n')))
-    console.log(bold(green('  GUIDE\n')))
-    console.log(green('  » Open the guide in your browser: jlord.github.io/git-it\n' + '  » Traditional Chinese guide: jlord.github.io/git-it/index-zhtw.html\n'))
-    // console.log(
-    //   bold('  » To launch the guide, run: `' + this.name + ' server`.\n'))
-    console.log(
-      '  » To view guide offline, copy this address to your browser:\n' + '  » ' + pathtoguide + '.html \n'
-      + '  » ' + pathtoguide + '-zhtw.html\n')
-    // if (this.helpFile) {
-    //   console.log(bold("  HELP\n"))
-    //   console.log(
-    //     bold('  » For help with this problem or with ' + this.name + ', run:\n   `' + this.name + ' help`.'))
-    // }
-    // if (this.creditsFile) {
-    //   console.log(
-    //     bold('  » For a list of those who contributed to ' + this.name + ', run:\n   `' + this.name + ' credits`.'))
-    // }
-    // if (this.prerequisitesFile) {
-    //   console.log(
-    //     bold('  » For any set up/installion prerequisites for ' + this.name + ', run:\n   `' + this.name + ' prerequisites`.'))
-    // }
+
+    console.log(bold(green(workshopStrings.verify)))
+    console.log(bold(green(workshopStrings.next)))
+
+    console.log(bold(green(workshopStrings.guide)))
+    console.log(workshopStrings.offline)
+
     console.log()
   }.bind(this))
 }
