@@ -16,6 +16,7 @@
   "dependencies": {
     "colors-tmpl": "~0.1.0",
     "ecstatic": "^0.5.4",
+    "lodash": "^3.10.1",
     "map-async": "~0.1.1",
     "mkdirp": "~0.3.5",
     "msee": "~0.1.1",

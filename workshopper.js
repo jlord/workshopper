@@ -6,6 +6,7 @@ const argv       = require('optimist').argv
     , msee       = require('msee')
     , http       = require('http')
     , ecstatic   = require('ecstatic')
+    , _          = require('lodash')
 
 const showMenu  = require('./menu')
     , verify    = require('./verify')
@@ -17,9 +18,14 @@ const showMenu  = require('./menu')
     , yellow    = require('./term-util').yellow
     , center    = require('./term-util').center
 
-const defaultWidth = 65
+var config = require('./config');
+
+const defaultWidth = 65;
 
 function Workshopper (options) {
+  config = _.assign(config, options.config)
+  console.log('new config: ', config)
+
   if (!(this instanceof Workshopper))
     return new Workshopper(options)
 
@@ -404,15 +410,14 @@ function onselect (name) {
     file = txt
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
-    var pathtoguide = path.join(this.appDir,'guide', 'index')
-
-    console.log(bold(green(workshopStrings.verify)))
-    console.log(bold(green(workshopStrings.next)))
-
-    console.log(bold(green(workshopStrings.guide)))
-    console.log(workshopStrings.offline)
-
-    console.log()
+    var pathtoguide = path.join(this.appDir, 'guide', 'index');
+    console.log(bold(green(config.verify)))
+    console.log(bold(green(config.next)))
+//
+//    console.log(bold(green(config.guide)))
+//    console.log(config.offline)
+//
+//    console.log()
   }.bind(this))
 }
 
