@@ -1,6 +1,6 @@
 {
   "name": "workshopper-jlord",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A terminal workshop runner framework",
   "main": "./workshopper.js",
   "author": "Rod Vagg <rod@vagg.org> (https://github.com/rvagg)",
