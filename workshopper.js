@@ -24,7 +24,6 @@ const defaultWidth = 65;
 
 function Workshopper (options) {
   config = _.assign(config, options.config)
-  console.log('new config: ', config)
 
   if (!(this instanceof Workshopper))
     return new Workshopper(options)
@@ -411,8 +410,8 @@ function onselect (name) {
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
     var pathtoguide = path.join(this.appDir, 'guide', 'index');
-    console.log(bold(green(config.verify)))
-    console.log(bold(green(config.next)))
+//    console.log(bold(green(config.verify)))
+//    console.log(bold(green(config.next)))
 //
 //    console.log(bold(green(config.guide)))
 //    console.log(config.offline)
