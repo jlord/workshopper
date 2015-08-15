@@ -42,8 +42,7 @@ The `'prerequisitesFile'` option is optional but if you supply one, users will g
 
 The `'creditsFile'` option is optional but if you supply one, users will get the contents of this file when they type `app credits` (where 'app' is your workshop application name). This file is intended to give credit to those who have added or assisted in creating the exercises. They will also see a pointer to this whenever they select a new exercise.
 
-`'strings'` points to an optional .json file that allows you to customize what a user sees after selection of a workshopper lesson. This allows a workshop creator to use the much simpler workshopper-jlord framework w
-
+`'strings'` points to an optional .json file that allows you to customize what a user sees after selection of a workshopper lesson. It takes four key:value pairs: `'guide'`, `'verify'`, `'offline'`, and `'next'`. If this file is absent, selecting any lesson will return some stdout that points users to the git-it help guides. 
 Create a *menu.json* file in your project that looks something like this:
 
 ```js
