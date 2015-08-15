@@ -4,6 +4,9 @@ const argv       = require('optimist').argv
     , mkdirp     = require('mkdirp')
     , map        = require('map-async')
     , msee       = require('msee')
+    , http       = require('http')
+    , ecstatic   = require('ecstatic')
+    , _          = require('lodash')
 
 const showMenu  = require('./menu')
     , verify    = require('./verify')
@@ -15,9 +18,13 @@ const showMenu  = require('./menu')
     , yellow    = require('./term-util').yellow
     , center    = require('./term-util').center
 
-const defaultWidth = 65
+var strings = require('./strings');
+
+const defaultWidth = 65;
 
 function Workshopper (options) {
+  strings = _.assign(strings, options.strings)
+
   if (!(this instanceof Workshopper))
     return new Workshopper(options)
 
@@ -56,11 +63,19 @@ Workshopper.prototype.init = function () {
   if (argv.h || argv.help || argv._[0] == 'help')
     return this._printHelp()
 
+<<<<<<< HEAD
   if (argv.s || argv.server || argv._[0] == 'server')
     if (argv._[1]) {
       return this._runServer(argv._[1])
     } else {
       return this._runServer()
+=======
+if (argv.s || argv.server || argv._[0] == 'server')
+  if (argv._[1]) {
+    return this._runServer(argv._[1])
+  } else {
+    return this._runServer()
+>>>>>>> tanner-dev
   }
 
   if (argv._[0] == 'credits')
@@ -108,6 +123,7 @@ Workshopper.prototype.verify = function (run) {
 
   dir     = this.dirFromName(current)
   setupFn = require(dir + '/setup.js')
+
 
   if (!setupFn.async) {
     setup = setupFn(run)
@@ -194,7 +210,7 @@ Workshopper.prototype.runSolution = function (setup, dir, current, run) {
     bold(yellow((run ? 'Running' : 'Verifying') + ' "' + current + '"...')) + '\n'
   )
 
-  var a   = submissionCmd(setup)
+  var a   = submissionCmd(dir, setup)
     , b   = solutionCmd(dir, setup)
     , v   = verify(a, b, {
           a      : setup.a
@@ -236,7 +252,9 @@ function solutionCmd (dir, setup) {
   return exec.concat(args)
 }
 
-function submissionCmd (setup) {
+function submissionCmd (dir, setup) {
+  var filename = argv._[1]
+  if (!filename) filename = dir + '/verify.js'
   var args = setup.args || setup.submissionArgs || []
     , exec
 
@@ -247,14 +265,14 @@ function submissionCmd (setup) {
       , require.resolve('./module-use-tracker')
       , setup.modUseTrack.trackFile
       , setup.modUseTrack.modules.join(',')
-      , argv._[1]
+      , filename
     ]
   } else if (setup.execWrap) {
     exec = [ require.resolve('./exec-wrapper') ]
     exec = exec.concat(setup.execWrap)
-    exec = exec.concat(argv._[1])
+    exec = exec.concat(filename)
   } else {
-    exec = [ argv._[1] ]
+    exec = [ filename ]
   }
 
   return exec.concat(args)
@@ -297,12 +315,12 @@ Workshopper.prototype._printUsage = function () {
 
 function onpass (setup, dir, current) {
   console.log(bold(green('# PASS')))
-  console.log('\nYour solution to ' + current + ' passed!')
+  console.log(green(bold('\nYour solution to ' + current + ' passed!')))
 
   if (setup.hideSolutions)
     return
 
-  console.log('\nHere\'s what the official solution is if you want to compare notes:\n')
+  // console.log('\nHere\'s what the official solution is if you want to compare notes:\n')
 
   var solutions = fs.readdirSync(dir).filter(function (file) {
         return (/^solution.*\.js/).test(file)
@@ -328,6 +346,7 @@ function onpass (setup, dir, current) {
         if (err)
           throw err
 
+<<<<<<< HEAD
         solutions.forEach(function (file, i) {
           console.log(repeat('-', this.width) + '\n')
           if (solutions.length > 1)
@@ -336,6 +355,16 @@ function onpass (setup, dir, current) {
           if (i == solutions.length - 1)
             console.log(repeat('-', this.width) + '\n')
         }.bind(this))
+=======
+        // solutions.forEach(function (file, i) {
+        //   console.log(repeat('-', this.width) + '\n')
+        //   if (solutions.length > 1)
+        //     console.log(bold(file.name) + ':\n')
+        //   console.log(file.content)
+        //   if (i == solutions.length - 1)
+        //     console.log(repeat('-', this.width) + '\n')
+        // }.bind(this))
+>>>>>>> tanner-dev
 
         this.updateData('completed', function (xs) {
           if (!xs) xs = []
@@ -349,6 +378,7 @@ function onpass (setup, dir, current) {
         if (remaining === 0) {
           console.log('You\'ve finished all the challenges! Hooray!\n')
         } else {
+          console.log(repeat('-', this.width) + '\n')
           console.log(
               'You have '
             + remaining
@@ -357,6 +387,7 @@ function onpass (setup, dir, current) {
             + ' left.'
           )
           console.log('Type `' + this.name + '` to show the menu.\n')
+          console.log(repeat('-', this.width) + '\n')
         }
 
         if (setup.close)
@@ -373,6 +404,7 @@ function onfail (setup, dir, current) {
     console.log('\nYour solution to ' + current + ' didn\'t pass. Try again!')
   else
     console.log('\nYour solution to ' + current + ' didn\'t match the expected output.\nTry again!')
+    console.log(repeat('-', this.width) + '\n')
 }
 
 function onselect (name) {
@@ -396,6 +428,7 @@ function onselect (name) {
     file = txt
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
+<<<<<<< HEAD
     console.log(
       bold('\n » To print these instructions again, run: `' + this.name + ' print`.'))
     console.log(
@@ -415,6 +448,12 @@ function onselect (name) {
         bold(' » For any set up/installion prerequisites for ' + this.name + ', run:\n   `' + this.name + ' prerequisites`.'))
     }
     console.log()
+=======
+    var pathtoguide = path.join(this.appDir, 'guide', 'index');
+    console.log(bold(green(strings.verify)))
+    console.log(bold(green(strings.next)))
+    console.log(bold(green(strings.guide)))
+    console.log(bold(green(strings.offline)))
   }.bind(this))
 }
 
