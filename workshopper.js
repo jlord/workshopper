@@ -18,12 +18,12 @@ const showMenu  = require('./menu')
     , yellow    = require('./term-util').yellow
     , center    = require('./term-util').center
 
-var config = require('./config');
+var strings = require('./strings');
 
 const defaultWidth = 65;
 
 function Workshopper (options) {
-  config = _.assign(config, options.config)
+  strings = _.assign(strings, options.strings)
 
   if (!(this instanceof Workshopper))
     return new Workshopper(options)
@@ -410,11 +410,11 @@ function onselect (name) {
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
     var pathtoguide = path.join(this.appDir, 'guide', 'index');
-//    console.log(bold(green(config.verify)))
-//    console.log(bold(green(config.next)))
+    console.log(bold(green(strings.verify)))
+    console.log(bold(green(strings.next)))
 //
-//    console.log(bold(green(config.guide)))
-//    console.log(config.offline)
+    console.log(bold(green(strings.guide)))
+    console.log(bold(green(strings.offline)))
 //
 //    console.log()
   }.bind(this))

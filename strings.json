@@ -1,0 +1,6 @@
+{
+  "guide": "» Open the guide in your browser: jlord.github.io/git-it\n » Traditional Chinese guide: jlord.github.io/git-it/index-zhtw.html",
+  "offline": "» To view guide offline, copy this address to your browser:\n » pathtoguide + .html \n » pathtoguide + -zhtw.html\n",
+  "verify": "» To verify your work for this problem, run: `git -it verify`.\n",
+  "next": "» Run `git-it` again to launch menu & go onto next challenge.\n'"
+}

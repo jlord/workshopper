@@ -21,6 +21,7 @@ Create a new Node project, add a `"bin"` that looks something like this:
 
 const Workshopper = require('workshopper')
     , path        = require('path')
+    , strings     = require('./strings')
 
 Workshopper({
     name              : 'learnyounode'
@@ -29,6 +30,7 @@ Workshopper({
   , helpFile          : path.join(__dirname, 'help.txt')
   , prerequisitesFile : path.join(__dirname, 'prerequisites.txt')
   , creditsFile       : path.join(__dirname, 'credits.txt')
+  , strings           : strings
 }).init()
 ```
 
@@ -39,6 +41,8 @@ The `'helpFile'` option is optional but if you supply one, users will get the co
 The `'prerequisitesFile'` option is optional but if you supply one, users will get the contents of this file when they type `app prerequisites` (where 'app' is your workshop application name). This file is intended to contain any instructions required for installations or set ups which are prerequisites needed to begin the lessons. They will also see a pointer to this whenever they select a new exercise.
 
 The `'creditsFile'` option is optional but if you supply one, users will get the contents of this file when they type `app credits` (where 'app' is your workshop application name). This file is intended to give credit to those who have added or assisted in creating the exercises. They will also see a pointer to this whenever they select a new exercise.
+
+`'strings'` points to an optional .json file that allows you to customize what a user sees after selection of a workshopper lesson. This allows a workshop creator to use the much simpler workshopper-jlord framework w
 
 Create a *menu.json* file in your project that looks something like this:
 
