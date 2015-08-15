@@ -42,7 +42,20 @@ The `'prerequisitesFile'` option is optional but if you supply one, users will g
 
 The `'creditsFile'` option is optional but if you supply one, users will get the contents of this file when they type `app credits` (where 'app' is your workshop application name). This file is intended to give credit to those who have added or assisted in creating the exercises. They will also see a pointer to this whenever they select a new exercise.
 
-`'strings'` points to an optional .json file that allows you to customize what a user sees after selection of a workshopper lesson. It takes four key:value pairs: `'guide'`, `'verify'`, `'offline'`, and `'next'`. If this file is absent, selecting any lesson will return some stdout that points users to the git-it help guides. 
+`'strings'` points to an optional .json file that allows you to customize what a user sees after selection of a workshopper lesson. If this file is absent, selecting any lesson will also return some stdout that points users to the git-it help guides. 
+
+A *strings.json* file looks something like this.
+
+```js
+{
+  "guide": "To view the guide",
+  "offline": "To view the guide offline, go here:",
+  "verify": "Type 'workshop-name verify' to check your submission.",
+  "next": "Type 'workshop-name' to open the menu and move onto the next lesson."
+}
+```
+
+
 Create a *menu.json* file in your project that looks something like this:
 
 ```js

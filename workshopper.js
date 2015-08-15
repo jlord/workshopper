@@ -412,11 +412,8 @@ function onselect (name) {
     var pathtoguide = path.join(this.appDir, 'guide', 'index');
     console.log(bold(green(strings.verify)))
     console.log(bold(green(strings.next)))
-//
     console.log(bold(green(strings.guide)))
     console.log(bold(green(strings.offline)))
-//
-//    console.log()
   }.bind(this))
 }
 
