@@ -68,6 +68,7 @@ Workshopper.prototype.init = function () {
       return this._runServer(argv._[1])
     } else {
       return this._runServer()
+    }
 
   if (argv._[0] == 'credits')
     return this._printCredits()
