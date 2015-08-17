@@ -63,20 +63,11 @@ Workshopper.prototype.init = function () {
   if (argv.h || argv.help || argv._[0] == 'help')
     return this._printHelp()
 
-<<<<<<< HEAD
   if (argv.s || argv.server || argv._[0] == 'server')
     if (argv._[1]) {
       return this._runServer(argv._[1])
     } else {
       return this._runServer()
-=======
-if (argv.s || argv.server || argv._[0] == 'server')
-  if (argv._[1]) {
-    return this._runServer(argv._[1])
-  } else {
-    return this._runServer()
->>>>>>> tanner-dev
-  }
 
   if (argv._[0] == 'credits')
     return this._printCredits()
@@ -346,25 +337,14 @@ function onpass (setup, dir, current) {
         if (err)
           throw err
 
-<<<<<<< HEAD
-        solutions.forEach(function (file, i) {
-          console.log(repeat('-', this.width) + '\n')
-          if (solutions.length > 1)
-            console.log(bold(file.name) + ':\n')
-          console.log(file.content)
-          if (i == solutions.length - 1)
-            console.log(repeat('-', this.width) + '\n')
-        }.bind(this))
-=======
-        // solutions.forEach(function (file, i) {
-        //   console.log(repeat('-', this.width) + '\n')
-        //   if (solutions.length > 1)
-        //     console.log(bold(file.name) + ':\n')
-        //   console.log(file.content)
-        //   if (i == solutions.length - 1)
-        //     console.log(repeat('-', this.width) + '\n')
-        // }.bind(this))
->>>>>>> tanner-dev
+//        solutions.forEach(function (file, i) {
+//          console.log(repeat('-', this.width) + '\n')
+//          if (solutions.length > 1)
+//            console.log(bold(file.name) + ':\n')
+//          console.log(file.content)
+//          if (i == solutions.length - 1)
+//            console.log(repeat('-', this.width) + '\n')
+//        }.bind(this))
 
         this.updateData('completed', function (xs) {
           if (!xs) xs = []
@@ -428,28 +408,6 @@ function onselect (name) {
     file = txt
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
-<<<<<<< HEAD
-    console.log(
-      bold('\n » To print these instructions again, run: `' + this.name + ' print`.'))
-    console.log(
-      bold(' » To execute your program in a test environment, run:\n   `' + this.name + ' run program.js`.'))
-    console.log(
-      bold(' » To verify your program, run: `' + this.name + ' verify program.js`.'))
-    if (this.helpFile) {
-      console.log(
-        bold(' » For help with this problem or with ' + this.name + ', run:\n   `' + this.name + ' help`.'))
-    }
-    if (this.creditsFile) {
-      console.log(
-        bold(' » For a list of those who contributed to ' + this.name + ', run:\n   `' + this.name + ' credits`.'))
-    }
-    if (this.prerequisitesFile) {
-      console.log(
-        bold(' » For any set up/installion prerequisites for ' + this.name + ', run:\n   `' + this.name + ' prerequisites`.'))
-    }
-    console.log()
-=======
-    var pathtoguide = path.join(this.appDir, 'guide', 'index');
     console.log(bold(green(strings.verify)))
     console.log(bold(green(strings.next)))
     console.log(bold(green(strings.guide)))
