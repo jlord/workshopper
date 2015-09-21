@@ -386,6 +386,24 @@ function onfail (setup, dir, current) {
   else
     console.log('\nYour solution to ' + current + ' didn\'t match the expected output.\nTry again!')
     console.log(repeat('-', this.width) + '\n')
+
+  // trying to show our example
+
+    var example = fs.readdirSync(dir).filter(function (file) {
+      return (/^example.*\.html/).test(file)
+    })
+
+//      .map(function (file) {
+//      return fs.readFileSync(path.join(dir, file), 'utf8')
+//         // .toString()
+//        //  .replace(/^/gm, '  ')
+//      }
+//    )
+
+    console.log('Here\'s what our solution looks like:')
+    console.log(example)
+    console.log(repeat('-', this.width) + '\n')
+
 }
 
 function onselect (name) {
