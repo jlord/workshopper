@@ -7,6 +7,8 @@ const argv       = require('optimist').argv
     , http       = require('http')
     , ecstatic   = require('ecstatic')
     , _          = require('lodash')
+    , shell      = require('shelljs')
+
 
 const showMenu  = require('./menu')
     , verify    = require('./verify')
@@ -312,8 +314,6 @@ function onpass (setup, dir, current) {
   if (setup.hideSolutions)
     return
 
-  // console.log('\nHere\'s what the official solution is if you want to compare notes:\n')
-
   var solutions = fs.readdirSync(dir).filter(function (file) {
         return (/^solution.*\.js/).test(file)
       }).map(function (file) {
@@ -359,6 +359,19 @@ function onpass (setup, dir, current) {
         if (remaining === 0) {
           console.log('You\'ve finished all the challenges! Hooray!\n')
         } else {
+          // trying to show our example
+          console.log(repeat('-', this.width))
+          console.log('Here\'s what our solution looks like:' + '\n')
+
+          var example = fs.readdirSync(dir).filter(function (file) {
+            return (/^example.*\.html/).test(file)
+          }).map(function (file) {
+              shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+              //    .toString()
+              //     .replace(/^/gm, '  ')
+            }
+          )
+
           console.log(repeat('-', this.width) + '\n')
           console.log(
               'You have '
@@ -388,22 +401,17 @@ function onfail (setup, dir, current) {
     console.log(repeat('-', this.width) + '\n')
 
   // trying to show our example
+  console.log('Here\'s what our solution looks like:')
 
-    var example = fs.readdirSync(dir).filter(function (file) {
+  var example = fs.readdirSync(dir).filter(function (file) {
       return (/^example.*\.html/).test(file)
-    })
-
-//      .map(function (file) {
-//      return fs.readFileSync(path.join(dir, file), 'utf8')
-//         // .toString()
-//        //  .replace(/^/gm, '  ')
-//      }
-//    )
-
-    console.log('Here\'s what our solution looks like:')
-    console.log(example)
-    console.log(repeat('-', this.width) + '\n')
-
+    }).map(function (file) {
+        shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+     //    .toString()
+    //     .replace(/^/gm, '  ')
+      }
+    )
+  console.log(repeat('-', this.width) + '\n')
 }
 
 function onselect (name) {
@@ -433,5 +441,6 @@ function onselect (name) {
     console.log(bold(green(strings.offline)))
   }.bind(this))
 }
+
 
 module.exports = Workshopper
