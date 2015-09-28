@@ -68,7 +68,8 @@ Workshopper.prototype.init = function () {
   if (argv.s || argv.server || argv._[0] == 'server')
     if (argv._[1]) {
       return this._runServer(argv._[1])
-    } else {
+    }
+    else {
       return this._runServer()
     }
 
@@ -92,14 +93,18 @@ Workshopper.prototype.init = function () {
 
   if (argv._[0] == 'select' || argv._[0] == 'print') {
     return onselect.call(this, argv._.length > 1
-      ? argv._.slice(1).join(' ')
-      : this.getData('current')
+        ? argv._.slice(1).join(' ')
+        : this.getData('current')
     )
   }
 
   var run = argv._[0] == 'run'
   if (argv._[0] == 'verify' || run)
     return this.verify(run)
+
+  if (argv._[0] == 'reset') {
+    return this.reset()
+  }
 
   this.printMenu()
 }
@@ -168,6 +173,11 @@ Workshopper.prototype.problems = function () {
   if (!this._problems)
     this._problems = require(path.join(this.appDir, 'menu.json'))
   return this._problems
+}
+
+Workshopper.prototype.reset = function () {
+  fs.unlink(path.resolve(this.dataDir, 'completed.json'), function () {})
+  fs.unlink(path.resolve(this.dataDir, 'current.json'), function () {})
 }
 
 Workshopper.prototype.getData = function (name) {
