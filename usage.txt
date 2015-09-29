@@ -11,4 +11,6 @@
   {bold}{green}{appname}{/green} print{/bold}
     Print the instructions for the currently selected workshop.
   {bold}{green}{appname}{/green} run{/bold}
-    Run the challenge's verify without triggering verify .
+    Run the challenge's verify without triggering verify.
+  {bold}{green}{appname}{/green} reset{/bold}
+    Clear all challenges completed status.
