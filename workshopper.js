@@ -367,6 +367,18 @@ function onpass (setup, dir, current) {
 
         remaining = this.problems().length - completed.length
         if (remaining === 0) {
+          console.log(repeat('-', this.width))
+          console.log('Here\'s what our solution looks like:' + '\n')
+
+          var example = fs.readdirSync(dir).filter(function (file) {
+            return (/^example.*\.html/).test(file)
+          }).map(function (file) {
+              shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+              //    .toString()
+              //     .replace(/^/gm, '  ')
+            }
+          )
+          console.log(repeat('-', this.width))
           console.log('You\'ve finished all the challenges! Hooray!\n')
         } else {
           // trying to show our example
