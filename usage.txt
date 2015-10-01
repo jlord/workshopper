@@ -10,7 +10,7 @@
     Show the currently selected workshop.
   {bold}{green}{appname}{/green} print{/bold}
     Print the instructions for the currently selected workshop.
-  {bold}{green}{appname}{/green} run program.js{/bold}
-    Run your program against the selected input.
-  {bold}{green}{appname}{/green} verify program.js{/bold}
-    Verify your program against the expected output.
+  {bold}{green}{appname}{/green} run{/bold}
+    Run the challenge's verify without triggering verify.
+  {bold}{green}{appname}{/green} reset{/bold}
+    Clear all challenges completed status.

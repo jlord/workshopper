@@ -4,6 +4,11 @@ const argv       = require('optimist').argv
     , mkdirp     = require('mkdirp')
     , map        = require('map-async')
     , msee       = require('msee')
+    , http       = require('http')
+    , ecstatic   = require('ecstatic')
+    , _          = require('lodash')
+    , shell      = require('shelljs')
+
 
 const showMenu  = require('./menu')
     , verify    = require('./verify')
@@ -15,9 +20,13 @@ const showMenu  = require('./menu')
     , yellow    = require('./term-util').yellow
     , center    = require('./term-util').center
 
-const defaultWidth = 65
+var strings = require('./strings');
+
+const defaultWidth = 65;
 
 function Workshopper (options) {
+  strings = _.assign(strings, options.strings)
+
   if (!(this instanceof Workshopper))
     return new Workshopper(options)
 
@@ -59,9 +68,10 @@ Workshopper.prototype.init = function () {
   if (argv.s || argv.server || argv._[0] == 'server')
     if (argv._[1]) {
       return this._runServer(argv._[1])
-    } else {
+    }
+    else {
       return this._runServer()
-  }
+    }
 
   if (argv._[0] == 'credits')
     return this._printCredits()
@@ -83,14 +93,18 @@ Workshopper.prototype.init = function () {
 
   if (argv._[0] == 'select' || argv._[0] == 'print') {
     return onselect.call(this, argv._.length > 1
-      ? argv._.slice(1).join(' ')
-      : this.getData('current')
+        ? argv._.slice(1).join(' ')
+        : this.getData('current')
     )
   }
 
   var run = argv._[0] == 'run'
   if (argv._[0] == 'verify' || run)
     return this.verify(run)
+
+  if (argv._[0] == 'reset') {
+    return this.reset()
+  }
 
   this.printMenu()
 }
@@ -108,6 +122,7 @@ Workshopper.prototype.verify = function (run) {
 
   dir     = this.dirFromName(current)
   setupFn = require(dir + '/setup.js')
+
 
   if (!setupFn.async) {
     setup = setupFn(run)
@@ -160,6 +175,11 @@ Workshopper.prototype.problems = function () {
   return this._problems
 }
 
+Workshopper.prototype.reset = function () {
+  fs.unlink(path.resolve(this.dataDir, 'completed.json'), function () {})
+  fs.unlink(path.resolve(this.dataDir, 'current.json'), function () {})
+}
+
 Workshopper.prototype.getData = function (name) {
   var file = path.resolve(this.dataDir, name + '.json')
   try {
@@ -194,7 +214,7 @@ Workshopper.prototype.runSolution = function (setup, dir, current, run) {
     bold(yellow((run ? 'Running' : 'Verifying') + ' "' + current + '"...')) + '\n'
   )
 
-  var a   = submissionCmd(setup)
+  var a   = submissionCmd(dir, setup)
     , b   = solutionCmd(dir, setup)
     , v   = verify(a, b, {
           a      : setup.a
@@ -236,7 +256,9 @@ function solutionCmd (dir, setup) {
   return exec.concat(args)
 }
 
-function submissionCmd (setup) {
+function submissionCmd (dir, setup) {
+  var filename = argv._[1]
+  if (!filename) filename = dir + '/verify.js'
   var args = setup.args || setup.submissionArgs || []
     , exec
 
@@ -247,14 +269,14 @@ function submissionCmd (setup) {
       , require.resolve('./module-use-tracker')
       , setup.modUseTrack.trackFile
       , setup.modUseTrack.modules.join(',')
-      , argv._[1]
+      , filename
     ]
   } else if (setup.execWrap) {
     exec = [ require.resolve('./exec-wrapper') ]
     exec = exec.concat(setup.execWrap)
-    exec = exec.concat(argv._[1])
+    exec = exec.concat(filename)
   } else {
-    exec = [ argv._[1] ]
+    exec = [ filename ]
   }
 
   return exec.concat(args)
@@ -297,12 +319,10 @@ Workshopper.prototype._printUsage = function () {
 
 function onpass (setup, dir, current) {
   console.log(bold(green('# PASS')))
-  console.log('\nYour solution to ' + current + ' passed!')
+  console.log(green(bold('\nYour solution to ' + current + ' passed!')))
 
   if (setup.hideSolutions)
     return
-
-  console.log('\nHere\'s what the official solution is if you want to compare notes:\n')
 
   var solutions = fs.readdirSync(dir).filter(function (file) {
         return (/^solution.*\.js/).test(file)
@@ -328,14 +348,14 @@ function onpass (setup, dir, current) {
         if (err)
           throw err
 
-        solutions.forEach(function (file, i) {
-          console.log(repeat('-', this.width) + '\n')
-          if (solutions.length > 1)
-            console.log(bold(file.name) + ':\n')
-          console.log(file.content)
-          if (i == solutions.length - 1)
-            console.log(repeat('-', this.width) + '\n')
-        }.bind(this))
+//        solutions.forEach(function (file, i) {
+//          console.log(repeat('-', this.width) + '\n')
+//          if (solutions.length > 1)
+//            console.log(bold(file.name) + ':\n')
+//          console.log(file.content)
+//          if (i == solutions.length - 1)
+//            console.log(repeat('-', this.width) + '\n')
+//        }.bind(this))
 
         this.updateData('completed', function (xs) {
           if (!xs) xs = []
@@ -347,8 +367,34 @@ function onpass (setup, dir, current) {
 
         remaining = this.problems().length - completed.length
         if (remaining === 0) {
+          console.log(repeat('-', this.width))
+          console.log('Here\'s what our solution looks like:' + '\n')
+
+          var example = fs.readdirSync(dir).filter(function (file) {
+            return (/^example.*\.html/).test(file)
+          }).map(function (file) {
+              shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+              //    .toString()
+              //     .replace(/^/gm, '  ')
+            }
+          )
+          console.log(repeat('-', this.width))
           console.log('You\'ve finished all the challenges! Hooray!\n')
         } else {
+          // trying to show our example
+          console.log(repeat('-', this.width))
+          console.log('Here\'s what our solution looks like:' + '\n')
+
+          var example = fs.readdirSync(dir).filter(function (file) {
+            return (/^example.*\.html/).test(file)
+          }).map(function (file) {
+              shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+              //    .toString()
+              //     .replace(/^/gm, '  ')
+            }
+          )
+
+          console.log(repeat('-', this.width) + '\n')
           console.log(
               'You have '
             + remaining
@@ -357,6 +403,7 @@ function onpass (setup, dir, current) {
             + ' left.'
           )
           console.log('Type `' + this.name + '` to show the menu.\n')
+          console.log(repeat('-', this.width) + '\n')
         }
 
         if (setup.close)
@@ -373,6 +420,20 @@ function onfail (setup, dir, current) {
     console.log('\nYour solution to ' + current + ' didn\'t pass. Try again!')
   else
     console.log('\nYour solution to ' + current + ' didn\'t match the expected output.\nTry again!')
+    console.log(repeat('-', this.width) + '\n')
+
+  // trying to show our example
+  console.log('Here\'s what our solution looks like:')
+
+  var example = fs.readdirSync(dir).filter(function (file) {
+      return (/^example.*\.html/).test(file)
+    }).map(function (file) {
+        shell.echo(fs.readFileSync(path.join(dir, file), 'utf8'))
+     //    .toString()
+    //     .replace(/^/gm, '  ')
+      }
+    )
+  console.log(repeat('-', this.width) + '\n')
 }
 
 function onselect (name) {
@@ -396,26 +457,12 @@ function onselect (name) {
     file = txt
 
   printText(this.name, this.appDir, file, path.extname(file), function () {
-    console.log(
-      bold('\n » To print these instructions again, run: `' + this.name + ' print`.'))
-    console.log(
-      bold(' » To execute your program in a test environment, run:\n   `' + this.name + ' run program.js`.'))
-    console.log(
-      bold(' » To verify your program, run: `' + this.name + ' verify program.js`.'))
-    if (this.helpFile) {
-      console.log(
-        bold(' » For help with this problem or with ' + this.name + ', run:\n   `' + this.name + ' help`.'))
-    }
-    if (this.creditsFile) {
-      console.log(
-        bold(' » For a list of those who contributed to ' + this.name + ', run:\n   `' + this.name + ' credits`.'))
-    }
-    if (this.prerequisitesFile) {
-      console.log(
-        bold(' » For any set up/installion prerequisites for ' + this.name + ', run:\n   `' + this.name + ' prerequisites`.'))
-    }
-    console.log()
+    console.log(bold(green(strings.verify)))
+    console.log(bold(green(strings.next)))
+    console.log(bold(green(strings.guide)))
+    console.log(bold(green(strings.offline)))
   }.bind(this))
 }
+
 
 module.exports = Workshopper
